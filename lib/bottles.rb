@@ -4,37 +4,54 @@ class Bottles
     verses(99, 0)
   end
 
-  def verses(max, min)
-    string = ''
-    while min <= max
-      string = string << "#{verse(max)}"
-      string = string + "\n" if min != max
-      max -= 1
-    end
-    string
+  def verses(starting, ending)
+    starting.downto(ending).collect{ | i | verse(i) }.join("\n")
   end
-
-  # def verses(hi, lo)
-  #   hi.downto(lo).map {|n| verse(n) }.join("\n")
-  # end
 
   def verse(number)
+    "#{quantity(number).capitalize} #{container(number)} of beer on the wall, " +
+    "#{quantity(number)} #{container(number)} of beer.\n" +
+    "#{next_step(number)}" +
+    "#{quantity(successor(number))} #{container(successor(number))} of beer on the wall.\n"
+  end
+
+  def successor(number)
     if number == 0
-      "No more bottles of beer on the wall, no more bottles of beer.\nGo to the store and buy some more, 99 bottles of beer on the wall.\n"
+      "99"
     else
-      "#{number} #{bottles_or_bottle?(number)} of beer on the wall, #{number} #{bottles_or_bottle?(number)} of beer.\nTake #{pronoun(number)} down and pass it around, #{bottle_phrase(number-1)} of beer on the wall.\n"
+      number - 1
     end
   end
 
-  def bottles_or_bottle?(number)
-    number >= 2 ? 'bottles' : 'bottle'
+  def next_step(number)
+    if number == 0
+      "Go to the store and buy some more, "
+    else
+      "Take #{pronoun(number)} down and pass it around, "
+    end
   end
 
-  def bottle_phrase(number)
-    number == 0 ? 'no more bottles' : "#{number} #{bottles_or_bottle?(number)}"
+  def quantity(number=0)
+    if number == 0
+      "no more"
+    else
+      number.to_s
+    end
   end
 
   def pronoun(number)
-    number == 1 ? 'it' : 'one'
+    if number == 1
+      "it"
+    else
+      "one"
+    end
+  end
+
+  def container(number)
+    if number == 1
+      "bottle"
+    else
+      "bottles"
+    end
   end
 end
